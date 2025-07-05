@@ -21,7 +21,7 @@ namespace PatientManagement.Models
 
         [Required(ErrorMessage = "Contact number is required")]
         [Phone]
-        [RegularExpression(@"^\+?[0-9]{10, 15}$", ErrorMessage = "Enter a valid contact number")]
+        [RegularExpression(@"^[0-9]{10}$", ErrorMessage = "Enter a 10-digit contact number")]
         public string ContactNumber { get; set; }
 
         [Required(ErrorMessage = "Weight is required")]
@@ -36,7 +36,7 @@ namespace PatientManagement.Models
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
 
-        [MaxLength(20)]
+        [MaxLength(200)]
         public string Address { get; set; }
 
         [MaxLength(50)]
