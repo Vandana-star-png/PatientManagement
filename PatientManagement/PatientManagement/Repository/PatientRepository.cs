@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PatientManagement.Data;
 using PatientManagement.Models;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace PatientManagement.Repository
 {
@@ -37,6 +38,33 @@ namespace PatientManagement.Repository
             await _context.SaveChangesAsync();
 
             return patient.Id;
+        }
+
+        public async Task<Patient> UpdatePatientAsync(Patient patient, PatientRequest patientRequest)
+        {
+            _mapper.Map(patientRequest, patient);
+
+            patient.UpdatedDate = DateTime.Now; 
+
+            await _context.SaveChangesAsync();
+            return patient;
+        }
+
+        public async Task<bool> UpdatePatientPatchAsync(Patient patient, JsonPatchDocument patientRequest)
+        {
+            patient.UpdatedDate = DateTime.Now;
+
+            patientRequest.ApplyTo(patient);
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeletePatientAsync(Patient patient)
+        {
+            _context.Patients.Remove(patient);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> IsPatientExistsAsync(string email)

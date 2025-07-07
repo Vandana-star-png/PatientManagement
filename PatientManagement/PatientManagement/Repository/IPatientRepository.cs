@@ -1,5 +1,6 @@
 ﻿using PatientManagement.Data;
 using PatientManagement.Models;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace PatientManagement.Repository
 {
@@ -10,6 +11,12 @@ namespace PatientManagement.Repository
         Task<Patient> GetPatientByIdAsync(int id);
 
         Task<int> AddPatientAsync(PatientRequest patientRequest);
+
+        Task<Patient> UpdatePatientAsync(Patient patient, PatientRequest patientRequest);
+
+        Task<bool> UpdatePatientPatchAsync(Patient patient, JsonPatchDocument patientRequest);
+
+        Task<bool> DeletePatientAsync(Patient patient);
 
         Task<bool> IsPatientExistsAsync(string email);
 
