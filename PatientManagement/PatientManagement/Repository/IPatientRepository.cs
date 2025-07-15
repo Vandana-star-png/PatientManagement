@@ -14,9 +14,9 @@ namespace PatientManagement.Repository
 
         Task<Patient> UpdatePatientAsync(Patient patient, PatientRequest patientRequest);
 
-        Task<bool> UpdatePatientPatchAsync(Patient patient, JsonPatchDocument patientRequest);
+        Task<Patient> UpdatePatientPatchAsync(Patient patient, JsonPatchDocument patientRequest);
 
-        Task<bool> DeletePatientAsync(Patient patient);
+        Task<Patient> DeletePatientAsync(Patient patient);
 
         Task<bool> IsPatientExistsAsync(string email);
 

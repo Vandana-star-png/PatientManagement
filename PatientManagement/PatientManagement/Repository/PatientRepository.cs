@@ -50,21 +50,21 @@ namespace PatientManagement.Repository
             return patient;
         }
 
-        public async Task<bool> UpdatePatientPatchAsync(Patient patient, JsonPatchDocument patientRequest)
+        public async Task<Patient> UpdatePatientPatchAsync(Patient patient, JsonPatchDocument patientRequest)
         {
             patient.UpdatedDate = DateTime.Now;
 
             patientRequest.ApplyTo(patient);
 
             await _context.SaveChangesAsync();
-            return true;
+            return patient;
         }
 
-        public async Task<bool> DeletePatientAsync(Patient patient)
+        public async Task<Patient> DeletePatientAsync(Patient patient)
         {
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
-            return true;
+            return patient;
         }
 
         public async Task<bool> IsPatientExistsAsync(string email)

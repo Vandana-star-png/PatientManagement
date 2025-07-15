@@ -29,19 +29,14 @@ namespace PatientManagement.Controllers
             return Ok(patients);
         }
 
-        [HttpGet("{id}", Name = "GetPatientById")]
+        [HttpGet("{id:int:min(1)}")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
-            if(id <= 0)
-            {
-                return BadRequest("Patient ID must be positive number");
-            }
-
             var patient = await _patientRepository.GetPatientByIdAsync(id);
 
             if (patient == null)
             {
-                return NotFound($"Patient with ID {id} not found");
+                return NotFound($"Patient ID {id} not found");
             }
 
             return Ok(patient);
@@ -50,9 +45,9 @@ namespace PatientManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody]PatientRequest patientRequest)
         {
-            if (ModelState.IsValid == false)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Required patient data");
+                return BadRequest(ModelState);
             }
             else if (await _patientRepository.IsPatientExistsAsync(patientRequest.Email))
             {
@@ -67,15 +62,15 @@ namespace PatientManagement.Controllers
 
             var patient = await _patientRepository.GetPatientByIdAsync(id);
 
-            return CreatedAtRoute("GetPatientById", new { id = id }, patient);
+            return Ok(patient);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] PatientRequest patientRequest)
         {
-            if (ModelState.IsValid == false)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Patient data is required");
+                return BadRequest(ModelState);
             }
             else if (await _patientRepository.IsPatientExistsAsync(patientRequest.Email))
             {
@@ -90,7 +85,7 @@ namespace PatientManagement.Controllers
 
             if (existingPatient == null)
             {
-                return BadRequest($"Patient with ID {id} not found");
+                return BadRequest($"Patient ID {id} not found");
             }
 
             var updatedPatient = await _patientRepository.UpdatePatientAsync(existingPatient, patientRequest);
@@ -109,14 +104,11 @@ namespace PatientManagement.Controllers
             var existingPatient = await _patientRepository.GetPatientByIdAsync(id);
             if (existingPatient == null)
             {
-                return NotFound($"Patient with ID {id} not found");
+                return NotFound($"Patient ID {id} not found");
             }
 
             var isUpdated = await _patientRepository.UpdatePatientPatchAsync(existingPatient, patientRequest);
-            if (!isUpdated)
-            {
-                return StatusCode(500, "An error occurred while saving the updated patient data");
-            }
+            
             return Ok("Patient data updated successfully");
         }
 
@@ -126,15 +118,12 @@ namespace PatientManagement.Controllers
             var existingPatient = await _patientRepository.GetPatientByIdAsync(id);
             if (existingPatient == null)
             {
-                return BadRequest($"Patient with ID {id} not found");
+                return BadRequest($"Patient ID {id} not found");
             }
 
             var isDeleted = await _patientRepository.DeletePatientAsync(existingPatient);
-            if (!isDeleted)
-            {
-                return BadRequest($"Failed to delete patient with ID {id}");
-            }
-            return Ok($"Patient with ID {id} deleted successfully");
+
+            return Ok($"Patient ID {id} deleted successfully");
         }
     }
 }
