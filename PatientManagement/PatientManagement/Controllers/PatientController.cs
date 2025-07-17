@@ -58,27 +58,17 @@ namespace PatientManagement.Controllers
                 return Conflict("patient with this contact number already exists");
             }
 
-            var id = await _patientRepository.AddPatientAsync(patientRequest);
-
-            var patient = await _patientRepository.GetPatientByIdAsync(id);
+            var patient = await _patientRepository.AddPatientAsync(patientRequest);
 
             return Ok(patient);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int:min(1)}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] PatientRequest patientRequest)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
-            else if (await _patientRepository.IsPatientExistsAsync(patientRequest.Email))
-            {
-                return Conflict("patient with this email already exists");
-            }
-            else if (await _patientRepository.IsNumberExistsAsync(patientRequest.ContactNumber))
-            {
-                return Conflict("patient with this contact number already exists");
             }
 
             var existingPatient = await _patientRepository.GetPatientByIdAsync(id);

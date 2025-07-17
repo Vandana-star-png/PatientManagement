@@ -29,7 +29,7 @@ namespace PatientManagement.Repository
             return patient;
         }
 
-        public async Task<int> AddPatientAsync(PatientRequest patientRequest)
+        public async Task<Patient> AddPatientAsync(PatientRequest patientRequest)
         {
             var patient = _mapper.Map<Patient>(patientRequest);
             patient.CreatedDate = DateTime.Now;
@@ -37,7 +37,7 @@ namespace PatientManagement.Repository
             _context.Patients.Add(patient);
             await _context.SaveChangesAsync();
 
-            return patient.Id;
+            return patient;
         }
 
         public async Task<Patient> UpdatePatientAsync(Patient patient, PatientRequest patientRequest)

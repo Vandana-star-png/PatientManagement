@@ -10,7 +10,7 @@ namespace PatientManagement.Repository
 
         Task<Patient> GetPatientByIdAsync(int id);
 
-        Task<int> AddPatientAsync(PatientRequest patientRequest);
+        Task<Patient> AddPatientAsync(PatientRequest patientRequest);
 
         Task<Patient> UpdatePatientAsync(Patient patient, PatientRequest patientRequest);
 
